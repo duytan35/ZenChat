@@ -1,13 +1,22 @@
 import styles from "./chatRoom.module.scss";
+import { useState } from "react";
 
 console.log(styles);
 
 function ListRoom() {
+  const [search, setSearch] = useState("");
   return (
     <div className={styles.listRoom}>
       <div className={styles.search}>
         <i className={styles.iconSearch + " fa-solid fa-magnifying-glass"}></i>
-        <input className={styles.input} placeholder="Search chat rooms" />
+        <input
+          className={styles.input}
+          placeholder="Search chat rooms"
+          value={search}
+          onChange={(e) => {
+            setSearch(e.target.value);
+          }}
+        />
       </div>
       <div className={styles.list}>
         <div className={styles.room}>

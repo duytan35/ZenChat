@@ -1,21 +1,67 @@
 import styles from "./SignUp.module.scss";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 
 function SignUp() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [fullName, setFullName] = useState("");
-  const [sex, setSex] = useState();
+  const [sex, setSex] = useState("");
+  const dayRef = useRef();
+  const monthRef = useRef();
+  const yearRef = useRef();
+
+  // check valid information
+  function checkValid() {
+    if (fullName.length < 3) {
+      alert("Full name must be at least 3 characters");
+      return false;
+    }
+    if (username.length < 3) {
+      alert("Username must be at least 3 characters");
+      return false;
+    }
+    if (password.length < 3) {
+      alert("Password must be at least 3 characters");
+      return false;
+    }
+    if (sex === "") {
+      alert("Sex must be chosen");
+      return false;
+    }
+    return true;
+  }
+
   // post login
-  function handleSubmit() {
-    console.log(username + " " + password + " " + fullName + " " + sex);
+  async function handleSubmit() {
+    if (checkValid()) {
+      const res = await fetch("http://localhost:3003/signup", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          fullName: fullName,
+          username: username,
+          password: password,
+          birthday: `${dayRef.current.value}/${monthRef.current.value}/${yearRef.current.value}`,
+          sex: sex,
+        }),
+      });
+      var rs = await res.json();
+      console.log(rs);
+      if (rs === true) {
+        alert("Signup success! Click Ok to access login page");
+        window.location.href = "./login";
+      } else {
+        alert("Signup fail! Username already exists");
+      }
+    }
   }
 
   useEffect(() => {
     const day = document.getElementById("day");
     const month = document.getElementById("month");
     const year = document.getElementById("year");
-
     for (let i = 1; i <= 31; i++) {
       let option = document.createElement("option");
       option.innerHTML = i;
@@ -65,11 +111,11 @@ function SignUp() {
         <div className={styles.birthday}>
           <span>Birthday:</span>
           <label htmlFor="day">Day</label>
-          <select name="day" id="day"></select>
+          <select name="day" id="day" ref={dayRef}></select>
           <label htmlFor="month">Month</label>
-          <select name="month" id="month"></select>
+          <select name="month" id="month" ref={monthRef}></select>
           <label htmlFor="year">Year</label>
-          <select name="year" id="year"></select>
+          <select name="year" id="year" ref={yearRef}></select>
         </div>
         <div className={styles.sex}>
           <span>Sex:</span>

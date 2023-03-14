@@ -7,8 +7,8 @@ const User = new Schema({
   username: String,
   password: String,
   birthday: String,
-  birthday: String,
   avatar: String,
+  refreshToken: { type: String, default: "default" },
   createAt: { type: Date, default: Date.now() },
 });
 

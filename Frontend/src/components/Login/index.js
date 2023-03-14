@@ -4,9 +4,42 @@ import { useState } from "react";
 function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+
+  // check valid information
+  function checkValid() {
+    if (username.length < 3) {
+      document.getElementById("error").innerHTML = "Username wrong!";
+      return false;
+    }
+    if (password.length < 3) {
+      document.getElementById("error").innerHTML = "Password wrong!";
+      return false;
+    }
+    document.getElementById("error").innerHTML = "";
+    return true;
+  }
+
   // post login
-  function handleSubmit() {
-    console.log(username + " " + password);
+  async function handleSubmit() {
+    if (checkValid()) {
+      const res = await fetch("http://localhost:3003/auth/login", {
+        method: "POST",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          username: username,
+          password: password,
+        }),
+      });
+      var rs = await res.json();
+      if (rs.isSuccess === true) {
+        window.location.href = "./";
+      } else {
+        document.getElementById("error").innerHTML = rs.error;
+      }
+    }
   }
 
   return (
@@ -32,6 +65,7 @@ function Login() {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
+        <p id="error" className={styles.error}></p>
         <button className={styles.btn} type="button" onClick={handleSubmit}>
           Login
         </button>

@@ -2,7 +2,7 @@ const MessageM = require("../models/MessageM");
 const UserM = require("../models/UserM");
 const GroupM = require("../models/GroupM");
 
-class GroupC {
+class HomeC {
   async index(req, res) {
     const instance = await GroupM.find({});
     // console.log(instance);
@@ -14,4 +14,4 @@ class GroupC {
   }
 }
 
-module.exports = new GroupC();
+module.exports = new HomeC();

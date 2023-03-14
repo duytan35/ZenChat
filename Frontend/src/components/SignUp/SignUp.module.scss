@@ -37,7 +37,7 @@ body {
   .form {
     padding: 22px;
     background-color: white;
-    width: 400px;
+    min-width: 400px;
     display: flex;
     flex-direction: column;
     border-radius: 12px;
